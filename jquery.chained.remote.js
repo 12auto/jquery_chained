@@ -74,12 +74,13 @@
                         $(self).trigger("change");
                     }
 
-                    request = $.getJSON(settings.url, data, function(json) {
-                        json = settings.data.call(self, json);
-                        build.call(self, json);
-                        /* Force updating the children. */
-                        $(self).trigger("change");
-                    });
+                    var later;
+                    if (settings.url > "") {
+                        request = later = $.getJSON(settings.url, data);
+                    } else {
+                        later = jQuery.Deferred().resolve({});
+                    }
+                    handleData(later);
                 });
 
                 /* If we have bootstrapped data given in options. */
@@ -94,6 +95,15 @@
                     build.call(self, items);
                 }
             });
+
+            function handleData(deferred){
+                deferred.done(function (json) {
+                    json = settings.data.call(self, json);
+                    build.call(self, json);
+                    /* Force updating the children. */
+                    $(self).trigger("change");
+                });
+            }
 
             /* Build the select from given data. */
             function build(json) {
