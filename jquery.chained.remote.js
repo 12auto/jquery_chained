@@ -75,7 +75,7 @@
                     }
 
                     request = $.getJSON(settings.url, data, function(json) {
-                        json = settings.data(json);
+                        json = settings.data.call(self, json);
                         build.call(self, json);
                         /* Force updating the children. */
                         $(self).trigger("change");
