@@ -139,6 +139,10 @@
                 } else {
                     $(self).prop("disabled", false);
                 }
+
+                if ($.isFunction(settings.onUpdated)) {
+                    settings.onUpdated.call(self);
+                }
             }
         });
     };
@@ -153,6 +157,7 @@
         bootstrap: null,
         loading: null,
         clear: false,
+        onUpdated: null,
         data: function(json) { return json; }
     };
 
