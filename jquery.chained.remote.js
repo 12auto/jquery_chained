@@ -84,8 +84,14 @@
 
                 /* If we have bootstrapped data given in options. */
                 if (settings.bootstrap) {
-                    build.call(self, settings.bootstrap);
-                    settings.bootstrap = null;
+                    var items;
+                    if ($.isFunction(settings.bootstrap)) {
+                        items = settings.bootstrap.call(self);
+                    } else {
+                        items = settings.bootstrap;
+                        settings.bootstrap = null;
+                    }
+                    build.call(self, items);
                 }
             });
 
