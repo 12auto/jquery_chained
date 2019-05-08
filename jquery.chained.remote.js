@@ -75,10 +75,10 @@
                     }
 
                     var later;
-                    if (settings.url > "") {
-                        request = later = $.getJSON(settings.url, data);
+                    if ($.isFunction(settings.makeDeferredRequest)) {
+                        request = later = settings.makeDeferredRequest.call(self, settings, data);
                     } else {
-                        later = jQuery.Deferred().resolve({});
+                        later = jQuery.Deferred().resolve(data);
                     }
                     handleData(later);
                 });
@@ -173,6 +173,9 @@
         bootstrap: null,
         loading: null,
         clear: false,
+        makeDeferredRequest: function (settings, parent_values) {
+            return $.getJSON(settings.url, parent_values);
+        },
         onUpdated: null,
         data: function(json) { return json; }
     };
